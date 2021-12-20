@@ -26,7 +26,7 @@
 		<div>
 			<strong>Pasivos</strong>
 		</div>
-		<div class="pasivos">
+		<div class="pasivo">
 			@FormatiarBalance(Model.Where(x => x.Balance < 0).Sum(x => x.Balance))
 		</div>
 	</div>
