@@ -1,0 +1,19 @@
+﻿.acordion-cuentas button {
+    color: black !important;
+    font-size: 20px;
+}
+
+    .acordion-cuentas button > span {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+.acordion-cuentas ul li {
+    display: flex;
+    justify-content: space-between;
+}
+
+.acordion-cuentas .accordion-collapse {
+    font-size: 18px;
+}
