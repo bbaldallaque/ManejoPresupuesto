@@ -8,9 +8,11 @@ namespace Presupuesto.Web.Servicio
     public interface IRepositorioCategoria
     {
 		Task Actualizar(Categoria categoria);
-		Task Crear(Categoria categoria);
-        Task<IEnumerable<Categoria>> Obtner(int usuarioId);
-		Task<Categoria> ObtnerPorId(int id, int UsuarioId);
+        Task Borrar(int id);
+        Task Crear(Categoria categoria);
+        Task<IEnumerable<Categoria>> Obtener(int usuarioId, TipoOperacion tipoOperacion);
+        Task<IEnumerable<Categoria>> Obtener(int usuarioId);
+		Task<Categoria> ObtenerPorId(int id, int UsuarioId);
 	}
 
     public class RepositorioCategoria : IRepositorioCategoria
@@ -31,13 +33,13 @@ namespace Presupuesto.Web.Servicio
             categoria.Id = id;  
         }
 
-        public async Task<IEnumerable<Categoria>> Obtner(int usuarioId)
+        public async Task<IEnumerable<Categoria>> Obtener(int usuarioId)
         {
             using var connection = new SqlConnection(connectionString);
             return await connection.QueryAsync<Categoria>("SELECT * FROM Categorias WHERE UsuarioId = @UsuarioId", new { usuarioId });
         }
 
-        public async Task<Categoria> ObtnerPorId(int id, int UsuarioId)
+        public async Task<Categoria> ObtenerPorId(int id, int UsuarioId)
 		{
             using var connection = new SqlConnection(connectionString);
             return await connection.QueryFirstOrDefaultAsync<Categoria>(
@@ -50,5 +52,18 @@ namespace Presupuesto.Web.Servicio
             await connection.ExecuteAsync(@"UPDATE Categorias SET Nombre = @Nombre, TipoOperacionId = @TipoOperacionId
                                           WHERE Id = @Id", categoria);
 		}
+
+        public async Task Borrar(int id)
+        {
+            using var connection = new SqlConnection(connectionString);
+            await connection.ExecuteAsync(@"DELETE Categorias WHERE Id = @Id", new { id });
+        }
+
+        public async Task<IEnumerable<Categoria>> Obtener(int usuarioId, TipoOperacion tipoOperacionId)
+        {
+            using var connection = new SqlConnection(connectionString);
+            return await connection.QueryAsync<Categoria>(@"SELECT * FROM Categorias 
+                                                            WHERE UsuarioId = @UsuarioId AND TipoOperacionId = @tipoOperacionId", new { usuarioId, tipoOperacionId });
+        }
     }
 }
