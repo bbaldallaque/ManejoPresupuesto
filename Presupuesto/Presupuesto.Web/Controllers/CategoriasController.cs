@@ -17,7 +17,7 @@ namespace Presupuesto.Web.Controllers
         public async Task<IActionResult> Index()
         {
             var usuarioId = servicioUsuarios.ObtenerUsuarioId();
-            var categorias = await repositorioCategoria.Obtner(usuarioId);
+            var categorias = await repositorioCategoria.Obtener(usuarioId);
             return View(categorias);
         }
 
@@ -43,7 +43,7 @@ namespace Presupuesto.Web.Controllers
         public async Task<IActionResult> Editar(int id)
 		{
             var usuarioId = servicioUsuarios.ObtenerUsuarioId();
-            var categoria = await repositorioCategoria.ObtnerPorId(id, usuarioId);
+            var categoria = await repositorioCategoria.ObtenerPorId(id, usuarioId);
 
 			if (categoria is null)
 			{
@@ -62,7 +62,7 @@ namespace Presupuesto.Web.Controllers
 			}
 
             var usuarioId = servicioUsuarios.ObtenerUsuarioId();
-            var categoria = await repositorioCategoria.ObtnerPorId(categoriaEditar.Id, usuarioId);
+            var categoria = await repositorioCategoria.ObtenerPorId(categoriaEditar.Id, usuarioId);
 
 			if (categoria is null)
 			{
@@ -73,5 +73,34 @@ namespace Presupuesto.Web.Controllers
             await repositorioCategoria.Actualizar(categoriaEditar);
             return RedirectToAction("Index");
 		}
+
+        public async Task<IActionResult> Borrar(int id)
+        {
+            var usuarioId = servicioUsuarios.ObtenerUsuarioId();
+            var categoria = await repositorioCategoria.ObtenerPorId(id, usuarioId);
+
+            if (categoria is null)
+            {
+                return RedirectToAction("NoEncontrado", "Home");
+            }
+
+            return View(categoria);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> BorrarCategoria(int id)
+        {
+            var usuarioId = servicioUsuarios.ObtenerUsuarioId();
+            var categoria = await repositorioCategoria.ObtenerPorId(id, usuarioId);
+
+            if (categoria is null)
+            {
+                return RedirectToAction("NoEncontrado", "Home");
+            }
+
+            await repositorioCategoria.Borrar(id);
+
+            return RedirectToAction("Index");
+        }
     }
 }
