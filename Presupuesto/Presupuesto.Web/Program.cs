@@ -9,7 +9,7 @@ builder.Services.AddTransient<IServicioUsuarios, ServicioUsuarios>();
 builder.Services.AddTransient<IRepositorioCuenta, RepositorioCuenta>();
 builder.Services.AddTransient<IRepositorioCategoria, RepositorioCategoria>(); 
 builder.Services.AddTransient<IRepositorioTransacciones, RepositorioTransacciones>();
-//builder.Services.AddTransient<IServicioReporte, ServicioReporte>();
+builder.Services.AddTransient<IServicioReporte, ServicioReporte>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddAutoMapper(typeof(Program));
 
