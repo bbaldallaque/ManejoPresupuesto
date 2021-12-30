@@ -4,7 +4,8 @@ namespace Presupuesto.Web.Servicio
 {
 	public interface IServicioReporte
 	{
-		Task<ReporteTransaccionesDetalladas> ObtenerReporteTransaccionesDetallas(int usuarioId, int mes, int año, dynamic ViewBag);
+        Task<IEnumerable<ResultadoObtenerPorSemana>> ObtenerReporteSemanal(int usarioId, int mes, int año, dynamic ViewBag);
+        Task<ReporteTransaccionesDetalladas> ObtenerReporteTransaccionesDetallas(int usuarioId, int mes, int año, dynamic ViewBag);
 		Task<ReporteTransaccionesDetalladas> ObtenerReporteTransaccionesDetallasPorCuenta(int usuarioId, int cuentaId, int mes, int año, dynamic ViewBag);
 	}
 
@@ -100,6 +101,21 @@ namespace Presupuesto.Web.Servicio
 			fechaFin = fechaInicio.AddMonths(1).AddDays(-1);
 
 			return (fechaInicio, fechaFin);
+		}
+
+		public async Task<IEnumerable<ResultadoObtenerPorSemana>> ObtenerReporteSemanal(int usarioId, int mes, int año, dynamic ViewBag)
+        {
+			(DateTime fechaInicio, DateTime fechaFin) = GenerarFechaInicioYFin(mes, año);
+			var paramentro = new ParamentroObtenerTransaccionesPorUsuario()
+			{
+				
+				UsuarioId = usarioId,
+				FechaInicio = fechaInicio,
+				FechaFin = fechaFin
+			};
+			AsignarValoresAlViewBag(ViewBag, fechaInicio);
+			var modelo = await repositorioTransacciones.ObtenerPorSemana(paramentro);
+			return modelo;
 		}
 	}
 }
