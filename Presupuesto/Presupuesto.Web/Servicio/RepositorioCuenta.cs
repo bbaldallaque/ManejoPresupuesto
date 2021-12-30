@@ -45,7 +45,7 @@ namespace Presupuesto.Web.Servicio
         public async Task<Cuenta> ObtenerPorId(int id, int usuarioId)
         {
             using var connection = new SqlConnection(connetionString);
-            return await connection.QueryFirstOrDefaultAsync<Cuenta>(@"SELECT Cuentas.Id, Cuentas.Nombre, Balance, tc.Id
+            return await connection.QueryFirstOrDefaultAsync<Cuenta>(@"SELECT Cuentas.Id, Cuentas.Nombre, Balance, Descripcion, TipoCuentaId
                                                         FROM Cuentas 
                                                         Inner Join TipoCuentas tc
                                                         ON tc.Id = Cuentas.TipoCuentaId
