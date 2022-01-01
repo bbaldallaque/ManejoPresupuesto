@@ -97,9 +97,50 @@ namespace Presupuesto.Web.Controllers
             return View();
         }
 
-        public IActionResult Mensual()
+        public async Task<IActionResult> Mensual(int año)
         {
-            return View();
+            var usuarioId = servicioUsuarios.ObtenerUsuarioId();
+
+			if (año == 0)
+			{
+                año = DateTime.Today.Year;
+			}
+
+            var transaccionesPorMes = await repositorioTransacciones.ObtenerPorMes(usuarioId, año);
+
+            var TransaccionesAgrupadas = transaccionesPorMes.GroupBy(x => x.Mes)
+                .Select(x => new ResultadoObtnerPorMes()
+                {
+                    Mes = x.Key,
+                    Ingreso = x.Where(x => x.TipoOperacionId == TipoOperacion.Ingreso).Select(x => x.Monto).FirstOrDefault(),
+                    Gastos = x.Where(x => x.TipoOperacionId == TipoOperacion.Gasto).Select(x => x.Monto).FirstOrDefault()
+                }).ToList();
+
+			for (int mes = 1; mes <= 12; mes++)
+			{
+                var transaccion = TransaccionesAgrupadas.FirstOrDefault(x => x.Mes == mes);
+                var fechaReferencia = new DateTime(año, mes, 1);
+				if (transaccion is null)
+				{
+                    TransaccionesAgrupadas.Add(new ResultadoObtnerPorMes()
+                    {
+                        Mes =mes,
+                        FechaReferencia = fechaReferencia
+                    });
+				}
+				else
+				{
+                    transaccion.FechaReferencia = fechaReferencia;
+				}
+			}
+
+            TransaccionesAgrupadas = TransaccionesAgrupadas.OrderByDescending(x => x.Mes).ToList();
+
+            var modelo = new ReporteMensualViewModel();
+            modelo.Año = año;
+            modelo.TransaccionesPorMes = TransaccionesAgrupadas;
+            
+            return View(modelo);
         }
 
         public IActionResult Calendario()

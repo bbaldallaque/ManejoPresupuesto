@@ -11,7 +11,8 @@ namespace Presupuesto.Web.Servicio
 		Task Crear(Transaccion transaccion);
 		Task<IEnumerable<Transaccion>> ObtenerPorCuentaId(ObtenerTransaccionesPorCuenta modelo);
 		Task<Transaccion> ObtenerPorId(int id, int usuarioId);
-        Task<IEnumerable<ResultadoObtenerPorSemana>> ObtenerPorSemana(ParamentroObtenerTransaccionesPorUsuario modelo);
+		Task<IEnumerable<ResultadoObtnerPorMes>> ObtenerPorMes(int usuarioId, int año);
+		Task<IEnumerable<ResultadoObtenerPorSemana>> ObtenerPorSemana(ParamentroObtenerTransaccionesPorUsuario modelo);
         Task<IEnumerable<Transaccion>> ObtenerPorUsuarioId(ParamentroObtenerTransaccionesPorUsuario modelo);
 	}
 
@@ -119,5 +120,19 @@ namespace Presupuesto.Web.Servicio
                                                                             FechaTransaccion Between @fechaInicio AND @fechaFin
                                                                             Group by DATEDIFF(d, @fechaInicio, FechaTransaccion) / 7, cat.TipoOperacionId", modelo);
         }
+
+        public async Task<IEnumerable<ResultadoObtnerPorMes>> ObtenerPorMes(int usuarioId, int año)
+		{
+            using var connection = new SqlConnection(connetionString);
+            return await connection.QueryAsync<ResultadoObtnerPorMes>(@"SELECT MONTH(FechaTransaccion) as Mes,
+                                                                    SUM(Monto) as Monto, cat.TipoOperacionId
+                                                                    FROM Transacciones
+                                                                    INNER JOIN Categorias cat
+                                                                    ON cat.Id = Transacciones.CategoriaId
+                                                                    WHERE Transacciones.UsuarioId = @usuarioId And YEAR(FechaTransaccion) = @Año
+                                                                    GROUP BY MONTH(fechaTransaccion), cat.TipoOperacionId", new { usuarioId, año });
+		}
+
     }
 }
+
