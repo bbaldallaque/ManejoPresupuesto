@@ -97,7 +97,7 @@ namespace Presupuesto.Web.Servicio
         {
             using var connection = new SqlConnection(connetionString);
             return await connection.QueryAsync<Transaccion>(@"SELECT t.Id, T.Monto, t.FechaTransaccion, c.Nombre as Categoria,
-                                                            cu.Nombre as Cuenta, c.TipoOperacionId
+                                                            cu.Nombre as Cuenta, c.TipoOperacionId, Nota
                                                             FROM Transacciones t
                                                             INNER JOIN Categorias c
                                                             ON c.Id = t.CategoriaId
