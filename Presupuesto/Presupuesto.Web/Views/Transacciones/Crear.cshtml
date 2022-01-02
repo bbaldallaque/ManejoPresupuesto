@@ -47,8 +47,9 @@
 </form>
 
 @section Scripts{
-	<partial name="_ValidationScriptsPartial" />
 	<script src="~/js/FormularioTransacciones.js" asp-append-version="true"></script>
+	<partial name="_ValidationScriptsPartial" />
+	
 
 	<script>
 		const urlObtenerCategorias = '@Url.Action("ObtenerCategorias")';
