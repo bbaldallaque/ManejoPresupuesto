@@ -40,10 +40,10 @@
 					@FormatearFecha(transaccionesPorSemana.FechaFin)</a>
 			</td>
 			<td class="activo" style="text-align: right">
-				@transaccionesPorSemana.Ingresos
+				@transaccionesPorSemana.Ingresos.ToString("N")
 			</td>
 			<td class="pasivo" style="text-align: right">
-				@transaccionesPorSemana.Gastos
+				@transaccionesPorSemana.Gastos.ToString("N")
 			</td>
 		</tr>
 	}
