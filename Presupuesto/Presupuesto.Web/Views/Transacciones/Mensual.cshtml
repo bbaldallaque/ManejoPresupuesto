@@ -45,8 +45,8 @@
 						@transaccionPorMes.FechaReferencia.ToString("MMM");
 					</a>
 				</td>
-				<td class="activo" style="text-align: right">@transaccionPorMes.Ingreso</td>
-				<td class="pasivo" style="text-align: right">@transaccionPorMes.Gastos</td>
+				<td class="activo" style="text-align: right">@transaccionPorMes.Ingreso.ToString("N")</td>
+				<td class="pasivo" style="text-align: right">@transaccionPorMes.Gastos.ToString("N")</td>
 			</tr>
 		}
 	</tbody>
