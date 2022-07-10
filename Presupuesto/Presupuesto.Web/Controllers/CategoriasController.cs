@@ -6,21 +6,35 @@ namespace Presupuesto.Web.Controllers
 {
     public class CategoriasController : Controller
     {
-        private readonly IRepositorioCategoria repositorioCategoria;
+        private readonly IRepositorioCategorias repositorioCategorias;
         private readonly IServicioUsuarios servicioUsuarios;
 
-        public CategoriasController(IRepositorioCategoria repositorioCategoria, IServicioUsuarios servicioUsuarios)
+        public CategoriasController(IRepositorioCategorias repositorioCategorias,
+            IServicioUsuarios servicioUsuarios)
         {
-            this.repositorioCategoria = repositorioCategoria;
+            this.repositorioCategorias = repositorioCategorias;
             this.servicioUsuarios = servicioUsuarios;
         }
-        public async Task<IActionResult> Index()
+
+        public async Task<IActionResult> Index(PaginacionViewModel paginacionViewModel)
         {
             var usuarioId = servicioUsuarios.ObtenerUsuarioId();
-            var categorias = await repositorioCategoria.Obtener(usuarioId);
-            return View(categorias);
+            var categorias = await repositorioCategorias.Obtener(usuarioId, paginacionViewModel);
+            var totalCategorias = await repositorioCategorias.Contar(usuarioId);
+
+            var respuestaVM = new PaginacionRespuesta<Categoria>
+            {
+                Elementos = categorias,
+                Pagina = paginacionViewModel.Pagina,
+                RecordsPorPagina = paginacionViewModel.RecordsPorPagina,
+                CantidadTotalRecords = totalCategorias,
+                BaseURL = Url.Action()
+            };
+
+            return View(respuestaVM);
         }
 
+        [HttpGet]
         public IActionResult Crear()
         {
             return View();
@@ -36,48 +50,48 @@ namespace Presupuesto.Web.Controllers
 
             var usuarioId = servicioUsuarios.ObtenerUsuarioId();
             categoria.UsuarioId = usuarioId;
-            await repositorioCategoria.Crear(categoria);
+            await repositorioCategorias.Crear(categoria);
             return RedirectToAction("Index");
         }
 
         public async Task<IActionResult> Editar(int id)
-		{
+        {
             var usuarioId = servicioUsuarios.ObtenerUsuarioId();
-            var categoria = await repositorioCategoria.ObtenerPorId(id, usuarioId);
+            var categoria = await repositorioCategorias.ObtenerPorId(id, usuarioId);
 
-			if (categoria is null)
-			{
+            if (categoria is null)
+            {
                 return RedirectToAction("NoEncontrado", "Home");
             }
 
             return View(categoria);
-		}
+        }
 
         [HttpPost]
         public async Task<IActionResult> Editar(Categoria categoriaEditar)
-		{
-			if (!ModelState.IsValid)
-			{
+        {
+            if (!ModelState.IsValid)
+            {
                 return View(categoriaEditar);
-			}
+            }
 
             var usuarioId = servicioUsuarios.ObtenerUsuarioId();
-            var categoria = await repositorioCategoria.ObtenerPorId(categoriaEditar.Id, usuarioId);
+            var categoria = await repositorioCategorias.ObtenerPorId(categoriaEditar.Id, usuarioId);
 
-			if (categoria is null)
-			{
+            if (categoria is null)
+            {
                 return RedirectToAction("NoEncontrado", "Home");
             }
 
-            categoriaEditar.UsuarioId = usuarioId;  
-            await repositorioCategoria.Actualizar(categoriaEditar);
+            categoriaEditar.UsuarioId = usuarioId;
+            await repositorioCategorias.Actualizar(categoriaEditar);
             return RedirectToAction("Index");
-		}
+        }
 
         public async Task<IActionResult> Borrar(int id)
         {
             var usuarioId = servicioUsuarios.ObtenerUsuarioId();
-            var categoria = await repositorioCategoria.ObtenerPorId(id, usuarioId);
+            var categoria = await repositorioCategorias.ObtenerPorId(id, usuarioId);
 
             if (categoria is null)
             {
@@ -91,15 +105,14 @@ namespace Presupuesto.Web.Controllers
         public async Task<IActionResult> BorrarCategoria(int id)
         {
             var usuarioId = servicioUsuarios.ObtenerUsuarioId();
-            var categoria = await repositorioCategoria.ObtenerPorId(id, usuarioId);
+            var categoria = await repositorioCategorias.ObtenerPorId(id, usuarioId);
 
             if (categoria is null)
             {
                 return RedirectToAction("NoEncontrado", "Home");
             }
 
-            await repositorioCategoria.Borrar(id);
-
+            await repositorioCategorias.Borrar(id);
             return RedirectToAction("Index");
         }
     }

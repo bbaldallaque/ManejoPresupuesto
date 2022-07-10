@@ -3,7 +3,8 @@ using Presupuesto.Web.Models;
 
 namespace Presupuesto.Web.Servicio
 {
-    public class UsuarioStore : IUserStore<Usuario>, IUserEmailStore<Usuario>, IUserPasswordStore<Usuario>
+    public class UsuarioStore : IUserStore<Usuario>, IUserEmailStore<Usuario>,
+        IUserPasswordStore<Usuario>
     {
         private readonly IRepositorioUsuarios repositorioUsuarios;
 
@@ -15,7 +16,7 @@ namespace Presupuesto.Web.Servicio
         public async Task<IdentityResult> CreateAsync(Usuario user, CancellationToken cancellationToken)
         {
             user.Id = await repositorioUsuarios.CrearUsuario(user);
-            return IdentityResult.Success;       
+            return IdentityResult.Success;
         }
 
         public Task<IdentityResult> DeleteAsync(Usuario user, CancellationToken cancellationToken)
@@ -25,12 +26,11 @@ namespace Presupuesto.Web.Servicio
 
         public void Dispose()
         {
-            
         }
 
         public async Task<Usuario> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken)
         {
-            return await repositorioUsuarios.BusacarUsuarioPorEmail(normalizedEmail);                
+            return await repositorioUsuarios.BuscarUsuarioPorEmail(normalizedEmail);
         }
 
         public Task<Usuario> FindByIdAsync(string userId, CancellationToken cancellationToken)
@@ -40,7 +40,7 @@ namespace Presupuesto.Web.Servicio
 
         public async Task<Usuario> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
         {
-            return await repositorioUsuarios.BusacarUsuarioPorEmail(normalizedUserName);
+            return await repositorioUsuarios.BuscarUsuarioPorEmail(normalizedUserName);
         }
 
         public Task<string> GetEmailAsync(Usuario user, CancellationToken cancellationToken)
@@ -97,7 +97,7 @@ namespace Presupuesto.Web.Servicio
         {
             user.EmailNormalizado = normalizedEmail;
             return Task.CompletedTask;
-        }   
+        }
 
         public Task SetNormalizedUserNameAsync(Usuario user, string normalizedName, CancellationToken cancellationToken)
         {

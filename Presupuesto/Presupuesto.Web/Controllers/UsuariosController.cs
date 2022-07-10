@@ -9,18 +9,19 @@ namespace Presupuesto.Web.Controllers
     public class UsuariosController : Controller
     {
         private readonly UserManager<Usuario> userManager;
-		private readonly SignInManager<Usuario> signInManager;
+        private readonly SignInManager<Usuario> signInManager;
 
-		public UsuariosController(UserManager<Usuario> userManager, SignInManager<Usuario> signInManager)
+        public UsuariosController(UserManager<Usuario> userManager,
+            SignInManager<Usuario> signInManager)
         {
             this.userManager = userManager;
-			this.signInManager = signInManager;
-		}
+            this.signInManager = signInManager;
+        }
 
         [AllowAnonymous]
         public IActionResult Registro()
         {
-            return View();  
+            return View();
         }
 
         [HttpPost]
@@ -39,7 +40,7 @@ namespace Presupuesto.Web.Controllers
             if (resultado.Succeeded)
             {
                 await signInManager.SignInAsync(usuario, isPersistent: true);
-                return RedirectToAction("Index", "transacciones");
+                return RedirectToAction("Index", "Transacciones");
             }
             else
             {
@@ -50,17 +51,10 @@ namespace Presupuesto.Web.Controllers
 
                 return View(modelo);
             }
-            
+
         }
 
-        [HttpPost]
-        [AllowAnonymous]
-        public async Task<IActionResult> LogOut()
-		{
-            await HttpContext.SignOutAsync(IdentityConstants.ApplicationScheme);
-            return RedirectToAction("Index", "Transacciones");
-		}
-
+        [HttpGet]
         [AllowAnonymous]
         public IActionResult Login()
         {
@@ -71,27 +65,30 @@ namespace Presupuesto.Web.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Login(LoginViewModel modelo)
         {
-			if (!ModelState.IsValid)
-			{
+            if (!ModelState.IsValid)
+            {
                 return View(modelo);
-			}
+            }
 
-            var resultado = await signInManager.PasswordSignInAsync(modelo.Email, modelo.Password, modelo.Recuerdame, lockoutOnFailure: false);
+            var resultado = await signInManager.PasswordSignInAsync(modelo.Email,
+                modelo.Password, modelo.Recuerdame, lockoutOnFailure: false);
 
-			if (resultado.Succeeded)
-			{
+            if (resultado.Succeeded)
+            {
                 return RedirectToAction("Index", "Transacciones");
             }
-			else
-			{
+            else
+            {
                 ModelState.AddModelError(string.Empty, "Nombre de usuario o password incorrecto.");
                 return View(modelo);
             }
         }
 
-        public IActionResult Index()
+        [HttpPost]
+        public async Task<IActionResult> Logout()
         {
-            return View();
+            await HttpContext.SignOutAsync(IdentityConstants.ApplicationScheme);
+            return RedirectToAction("Index", "Transacciones");
         }
     }
 }

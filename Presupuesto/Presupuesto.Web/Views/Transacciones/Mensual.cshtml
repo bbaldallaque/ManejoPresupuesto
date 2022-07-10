@@ -5,9 +5,9 @@
 	int añoAnterior = Model.Año - 1;
 	int añoPosterior = Model.Año + 1;
 
-	var resumenMontos = new ResumenMontoViewModel()
+	var resumenMontos = new ResumenMontosViewModel()
 	{
-		Ingresos = Model.Ingesos,
+		Ingresos = Model.Ingresos,
 		Gastos = Model.Gastos,
 		Total = Model.Total
 	};
@@ -45,7 +45,7 @@
 						@transaccionPorMes.FechaReferencia.ToString("MMM");
 					</a>
 				</td>
-				<td class="activo" style="text-align: right">@transaccionPorMes.Ingreso.ToString("N")</td>
+				<td class="activo" style="text-align: right">@transaccionPorMes.Ingresos.ToString("N")</td>
 				<td class="pasivo" style="text-align: right">@transaccionPorMes.Gastos.ToString("N")</td>
 			</tr>
 		}

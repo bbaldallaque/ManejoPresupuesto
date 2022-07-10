@@ -9,7 +9,8 @@ namespace Presupuesto.Web.Controllers
         private readonly IRepositorioTiposCuentas repositorioTiposCuentas;
         private readonly IServicioUsuarios servicioUsuarios;
 
-        public TiposCuentasController(IRepositorioTiposCuentas repositorioTiposCuentas, IServicioUsuarios servicioUsuarios)
+        public TiposCuentasController(IRepositorioTiposCuentas repositorioTiposCuentas,
+            IServicioUsuarios servicioUsuarios)
         {
             this.repositorioTiposCuentas = repositorioTiposCuentas;
             this.servicioUsuarios = servicioUsuarios;
@@ -36,20 +37,25 @@ namespace Presupuesto.Web.Controllers
             }
 
             tipoCuenta.UsuarioId = servicioUsuarios.ObtenerUsuarioId();
-            var yaExisteTipoCuennta = await repositorioTiposCuentas.Existe(tipoCuenta.Nombre, tipoCuenta.UsuarioId);
 
-            if (yaExisteTipoCuennta)
+            var yaExisteTipoCuenta =
+                await repositorioTiposCuentas.Existe(tipoCuenta.Nombre, tipoCuenta.UsuarioId);
+
+            if (yaExisteTipoCuenta)
             {
-                ModelState.AddModelError(nameof(tipoCuenta.Nombre), $"El nombre {tipoCuenta.Nombre} ya existe");
+                ModelState.AddModelError(nameof(tipoCuenta.Nombre),
+                    $"El nombre {tipoCuenta.Nombre} ya existe.");
+
                 return View(tipoCuenta);
             }
 
             await repositorioTiposCuentas.Crear(tipoCuenta);
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index");
         }
 
-        public async Task<IActionResult> Edit(int id)
+        [HttpGet]
+        public async Task<ActionResult> Editar(int id)
         {
             var usuarioId = servicioUsuarios.ObtenerUsuarioId();
             var tipoCuenta = await repositorioTiposCuentas.ObtenerPorId(id, usuarioId);
@@ -63,7 +69,7 @@ namespace Presupuesto.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(TipoCuenta tipoCuenta)
+        public async Task<ActionResult> Editar(TipoCuenta tipoCuenta)
         {
             var usuarioId = servicioUsuarios.ObtenerUsuarioId();
             var tipoCuentaExiste = await repositorioTiposCuentas.ObtenerPorId(tipoCuenta.Id, usuarioId);
@@ -74,22 +80,7 @@ namespace Presupuesto.Web.Controllers
             }
 
             await repositorioTiposCuentas.Actualizar(tipoCuenta);
-
             return RedirectToAction("Index");
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> VerificarExisteTipoCuenta(string nombre)
-        {
-            var usuarioId = servicioUsuarios.ObtenerUsuarioId();
-            var yaExisteTipoCuenta = await repositorioTiposCuentas.Existe(nombre, usuarioId);
-
-            if (yaExisteTipoCuenta)
-            {
-                return Json($"El nombre {nombre} ya existe");
-            }
-
-            return Json(true);
         }
 
         public async Task<IActionResult> Borrar(int id)
@@ -120,6 +111,20 @@ namespace Presupuesto.Web.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpGet]
+        public async Task<IActionResult> VerificarExisteTipoCuenta(string nombre)
+        {
+            var usuarioId = servicioUsuarios.ObtenerUsuarioId();
+            var yaExisteTipoCuenta = await repositorioTiposCuentas.Existe(nombre, usuarioId);
+
+            if (yaExisteTipoCuenta)
+            {
+                return Json($"El nombre {nombre} ya existe");
+            }
+
+            return Json(true);
+        }
+
         [HttpPost]
         public async Task<IActionResult> Ordenar([FromBody] int[] ids)
         {
@@ -127,15 +132,15 @@ namespace Presupuesto.Web.Controllers
             var tiposCuentas = await repositorioTiposCuentas.Obtener(usuarioId);
             var idsTiposCuentas = tiposCuentas.Select(x => x.Id);
 
-            var idsTipodCuentasNoPertenecenAlusuario = ids.Except(idsTiposCuentas).ToList();
+            var idsTiposCuentasNoPertenecenAlUsuario = ids.Except(idsTiposCuentas).ToList();
 
-            if (idsTipodCuentasNoPertenecenAlusuario.Count > 0)
+            if (idsTiposCuentasNoPertenecenAlUsuario.Count > 0)
             {
                 return Forbid();
             }
 
             var tiposCuentasOrdenados = ids.Select((valor, indice) =>
-            new TipoCuenta() { Id = valor, Orden = indice + 1 }).AsEnumerable();
+                new TipoCuenta() { Id = valor, Orden = indice + 1 }).AsEnumerable();
 
             await repositorioTiposCuentas.Ordenar(tiposCuentasOrdenados);
 
