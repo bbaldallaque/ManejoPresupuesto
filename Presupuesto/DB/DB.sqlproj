@@ -65,8 +65,8 @@
     <Folder Include="dbo\Stored Procedures\" />
   </ItemGroup>
   <ItemGroup>
-    <Build Include="dbo\Tables\TipoOperaciones.sql" />
-    <Build Include="dbo\Tables\TipoCuentas.sql" />
+    <Build Include="dbo\Tables\TiposOperaciones.sql" />
+    <Build Include="dbo\Tables\TiposCuentas.sql" />
     <Build Include="dbo\Tables\Cuentas.sql" />
     <Build Include="dbo\Tables\Usuarios.sql" />
     <Build Include="dbo\Tables\Categorias.sql" />

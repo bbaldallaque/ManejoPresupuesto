@@ -4,6 +4,6 @@ namespace Presupuesto.Web.Models
 {
     public class CuentaCreacionViewModel : Cuenta
     {
-        public IEnumerable<SelectListItem> TiposCuentas { get; set; } 
+        public IEnumerable<SelectListItem> TiposCuentas { get; set; }
     }
 }

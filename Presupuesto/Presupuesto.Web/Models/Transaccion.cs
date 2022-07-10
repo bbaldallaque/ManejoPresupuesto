@@ -7,29 +7,22 @@ namespace Presupuesto.Web.Models
         public int Id { get; set; }
 
         public int UsuarioId { get; set; }
-
-        [Display(Name = "Fecha Transaccion")]
+        [Display(Name = "Fecha Transacción")]
         [DataType(DataType.Date)]
         public DateTime FechaTransaccion { get; set; } = DateTime.Today;
-        //DateTime.Parse(DateTime.Now.ToString("yyy-MM-dd hh:MM tt"));
-        //DateTime.Parse(DateTime.Now.ToString("g"));
-
         public decimal Monto { get; set; }
-
-        [Display(Name = "Categoria")]
-        [Range(1, maximum: int.MaxValue, ErrorMessage ="Debe seleccionar una categoria")]
+        [Range(1, maximum: int.MaxValue, ErrorMessage = "Debe seleccionar una categoría")]
+        [Display(Name = "Categoría")]
         public int CategoriaId { get; set; }
-        [StringLength(maximumLength: 1000, ErrorMessage ="La nota no puede pasar de {1} carateres")]
+        [StringLength(maximumLength: 1000, ErrorMessage = "La nota no puede pasar de {1} caracteres")]
         public string Nota { get; set; }
-
-        [Display(Name = "Cuenta")]
         [Range(1, maximum: int.MaxValue, ErrorMessage = "Debe seleccionar una cuenta")]
+        [Display(Name = "Cuenta")]
         public int CuentaId { get; set; }
-
-        [Display(Name = "Tipo operacion")]
+        [Display(Name = "Tipo Operación")]
         public TipoOperacion TipoOperacionId { get; set; } = TipoOperacion.Ingreso;
 
-		public string Cuenta { get; set; }
+        public string Cuenta { get; set; }
 
         public string Categoria { get; set; }
     }

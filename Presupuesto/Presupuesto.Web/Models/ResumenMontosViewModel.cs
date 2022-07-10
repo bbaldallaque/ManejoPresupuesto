@@ -1,6 +1,6 @@
 ﻿namespace Presupuesto.Web.Models
 {
-    public class ResumenMontoViewModel
+    public class ResumenMontosViewModel
     {
         public decimal Ingresos { get; set; }
 

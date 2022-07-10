@@ -2,14 +2,10 @@
 {
 	public class ReporteMensualViewModel
 	{
-		public IEnumerable<ResultadoObtnerPorMes> TransaccionesPorMes { get; set; }
-
-		public decimal Ingesos => TransaccionesPorMes.Sum(x => x.Ingreso);
-
-		public decimal Gastos => TransaccionesPorMes.Sum(x => x.Gastos);
-
-		public decimal Total => Ingesos - Gastos;
-
-		public int Año { get; set; }
-	}
+        public IEnumerable<ResultadoObtenerPorMes> TransaccionesPorMes { get; set; }
+        public decimal Ingresos => TransaccionesPorMes.Sum(x => x.Ingresos);
+        public decimal Gastos => TransaccionesPorMes.Sum(x => x.Gastos);
+        public decimal Total => Ingresos - Gastos;
+        public int Año { get; set; }
+    }
 }
