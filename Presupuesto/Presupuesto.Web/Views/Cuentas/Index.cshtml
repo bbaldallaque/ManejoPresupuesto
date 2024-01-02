@@ -57,7 +57,7 @@
                     var claseTipoCuenta = ObtenerClaseBalance(tipoCuenta.Balance);
                 }
                 <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                    data-bs-target="@dataBSTarget">
+                        data-bs-target="@dataBSTarget">
                     <span class="me-3">
                         <span><strong>@tipoCuenta.TipoCuenta</strong></span>
                         <span class="@claseTipoCuenta">@FormatearBalance(tipoCuenta.Balance)</span>
@@ -73,12 +73,12 @@
                             <li class="list-group-item">
                                 <span>
                                     <strong><a asp-action="Detalle" asp-route-id="@cuenta.Id">@cuenta.Nombre</a></strong>
-                                <a asp-action="Editar" asp-route-id="@cuenta.Id" class="btn-primary btn">
-                                    <i class="bi-pencil-fill"></i>
-                                </a>   
-                                <a asp-action="Borrar" asp-route-id="@cuenta.Id" class="btn-danger btn">
-                                    <i class="bi-trash-fill"></i>
-                                </a>   
+                                    <a asp-action="Editar" asp-route-id="@cuenta.Id" class="btn-primary btn">
+                                        <i class="bi-pencil-fill"></i>
+                                    </a>
+                                    <a asp-action="Borrar" asp-route-id="@cuenta.Id" class="btn-danger btn">
+                                        <i class="bi-trash-fill"></i>
+                                    </a>
                                 </span>
                                 <span class="@claseCuenta">@FormatearBalance(cuenta.Balance)</span>
                             </li>

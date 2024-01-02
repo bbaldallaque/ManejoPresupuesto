@@ -16,23 +16,30 @@ namespace Presupuesto.Web.Controllers
             this.servicioUsuarios = servicioUsuarios;
         }
 
-        public async Task<IActionResult> Index(PaginacionViewModel paginacionViewModel)
+        public async Task<IActionResult> Index()
         {
             var usuarioId = servicioUsuarios.ObtenerUsuarioId();
-            var categorias = await repositorioCategorias.Obtener(usuarioId, paginacionViewModel);
-            var totalCategorias = await repositorioCategorias.Contar(usuarioId);
-
-            var respuestaVM = new PaginacionRespuesta<Categoria>
-            {
-                Elementos = categorias,
-                Pagina = paginacionViewModel.Pagina,
-                RecordsPorPagina = paginacionViewModel.RecordsPorPagina,
-                CantidadTotalRecords = totalCategorias,
-                BaseURL = Url.Action()
-            };
-
-            return View(respuestaVM);
+            var categorias = await repositorioCategorias.Obtener(usuarioId);
+            return View(categorias);
         }
+
+        //public async Task<IActionResult> Index(PaginacionViewModel paginacionViewModel)
+        //{
+        //    var usuarioId = servicioUsuarios.ObtenerUsuarioId();
+        //    var categorias = await repositorioCategorias.Obtener(usuarioId, paginacionViewModel);
+        //    var totalCategorias = await repositorioCategorias.Contar(usuarioId);
+
+        //    var respuestaVM = new PaginacionRespuesta<Categoria>
+        //    {
+        //        Elementos = categorias,
+        //        Pagina = paginacionViewModel.Pagina,
+        //        RecordsPorPagina = paginacionViewModel.RecordsPorPagina,
+        //        CantidadTotalRecords = totalCategorias,
+        //        BaseURL = Url.Action()
+        //    };
+
+        //    return View(respuestaVM);
+        //}
 
         [HttpGet]
         public IActionResult Crear()
